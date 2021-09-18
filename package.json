@@ -4,7 +4,7 @@
   "description": "Youtube Clone built using NodeJS, Express, Monge and ES6",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node index.js"
+    "dev": "nodemon --exec babel-node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/chanhong-ji/youtube-project#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
