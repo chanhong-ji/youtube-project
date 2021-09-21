@@ -1,4 +1,4 @@
-export const join = (req, res) => res.render("home.pug");
+export const join = (req, res) => res.render("join");
 export const login = (req, res) => res.send("user login");
 
 export const see = (req, res) => res.send("Edit User profile");
