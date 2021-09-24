@@ -5,7 +5,6 @@ import userRouter from "./routers/userRrouter";
 import videoRouter from "./routers/videoRouter";
 
 const app = express();
-const PORT = 5000;
 
 app.set("views", process.cwd() + "/src/views/");
 app.set("view engine", "pug");
@@ -16,6 +15,4 @@ app.use("/videos", videoRouter);
 
 app.use(morgan("common"));
 
-const onListening = () => console.log(`Server has opened on ${PORT} port💫💨.`);
-
-app.listen(PORT, onListening);
+export default app;
