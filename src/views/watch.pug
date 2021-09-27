@@ -2,7 +2,8 @@ extends base
 
 block content
     main
-        h3 #{video.views} #{video.views === 1 ? "view" : "views"}
-        a(href=`${video.id}/edit`) Edit video &rarr;
-            
+        div 
+            p=video.desciption
+            small=video.createdAt
+            a(href=`${video.id}/edit`) Edit Video &rarr;
     include partials/footer
