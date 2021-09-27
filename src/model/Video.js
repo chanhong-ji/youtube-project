@@ -11,10 +11,10 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-videoSchema.pre("save", async function () {
-  this.hashtags = this.hashtags[0]
+videoSchema.static("formatHashtags", function (hashtags) {
+  return hashtags
     .split(",")
-    .map((tag) => (tag.startsWith("#") ? tag.trim() : `#${tag.trim()}`));
+    .map((tag) => (tag.startsWith("#") ? tag : `#${tag}`));
 });
 
 const Video = mongoose.model("Video", videoSchema);
