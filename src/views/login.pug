@@ -1,0 +1,14 @@
+extends base
+
+block content 
+    main 
+        if errorMessage 
+            span=errorMessage
+        form(method='post')
+            input(name="username",type="text", required, placeholder="Username")
+            input(name="password", type="password", required, placeholder="Password")
+            input(type="submit", value="Join")
+        hr
+        div
+            span Don't have an account? 
+            a(href="/join") Create one now &rarr; 
