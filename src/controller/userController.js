@@ -1,8 +1,7 @@
 import User from "../model/User";
 import bcrypt from "bcrypt";
 
-export const getJoin = (req, res) =>
-  res.render("join", { pageTitle: "Create Account" });
+export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 
 export const postJoin = async (req, res) => {
   const { name, email, username, password, password2, location } = req.body;
@@ -62,6 +61,8 @@ export const postLogin = async (req, res) => {
       .render("login", { pageTitle, errorMessage: "Wrong password" });
   }
 
+  req.session.loggedIn = true;
+  req.session.user = user;
   return res.redirect("/");
 };
 
