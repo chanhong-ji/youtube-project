@@ -45,7 +45,7 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email, socialOnly: false });
 
   if (!user) {
     return res.status(400).render("login", {
@@ -95,6 +95,7 @@ export const finishGithubLogin = async (req, res) => {
       },
     })
   ).json();
+
   if ("access_token" in tokenRequest) {
     const { access_token } = tokenRequest;
     const apiUrl = "https://api.github.com/user";
@@ -116,12 +117,30 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
+
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
-    if (!email) {
+
+    if (!emailObj) {
       return res.redirect("/login");
     }
+
+    const user = await User.findOne({ email: emailObj.email });
+    if (!user) {
+      await User.create({
+        email: emailObj.email,
+        username: userData.name,
+        socialOnly: true,
+        password: "",
+        location: userData.location,
+        avatarUrl: userData.avatar_url,
+      });
+      return res.redirect("/");
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
   } else {
     return redirect("/login");
   }
