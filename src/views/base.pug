@@ -9,8 +9,6 @@ html(lang="ko")
             nav
                 ul
                     li
-                        a(href="/videos/upload") Upload Video
-                    li
                         a(href="/") Home
                     li 
                         a(href="/search") Search
@@ -21,6 +19,8 @@ html(lang="ko")
                             a(href="/users/logout") Log out
                         li 
                             a(href="/") #{loggedInUser.name}의 Profile
+                        li
+                            a(href="/videos/upload") Upload Video
                     else
                         li 
                             a(href="/join") Join
