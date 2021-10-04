@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 
 export const postJoin = async (req, res) => {
-  const { name, email, username, password, password2, location } = req.body;
+  const { email, username, password, password2, location } = req.body;
   const pageTitle = "Join";
 
   if (password !== password2) {
@@ -15,17 +15,16 @@ export const postJoin = async (req, res) => {
     });
   }
 
-  const exists = await User.exists({ $or: [{ username }, { email }] });
+  const exists = await User.exists({ email });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This username/email is already taken.",
+      errorMessage: "This email is already taken.",
     });
   }
 
   try {
     await User.create({
-      name,
       email,
       username,
       password,
@@ -45,13 +44,13 @@ export const getLogin = (req, res) => {
 
 export const postLogin = async (req, res) => {
   const pageTitle = "Login";
-  const { username, password } = req.body;
-  const user = await User.findOne({ username });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
 
   if (!user) {
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "An account with this username does not exists.",
+      errorMessage: "An account with this email does not exists.",
     });
   }
 
@@ -117,7 +116,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    const email = emailData.find(
+    const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
     if (!email) {
