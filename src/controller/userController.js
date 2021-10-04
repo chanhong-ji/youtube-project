@@ -146,9 +146,9 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const see = (req, res) => res.send("Edit User profile");
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+export const see = (req, res) => res.send("Edit User profile");
 export const edit = (req, res) => res.send("Edit User");
