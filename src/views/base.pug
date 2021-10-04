@@ -16,6 +16,8 @@ html(lang="ko")
                         a(href="/search") Search
                     if loggedIn
                         li 
+                            a(href="/users/edit") Edit profile
+                        li 
                             a(href="/users/logout") Log out
                         li 
                             a(href="/") #{loggedInUser.name}의 Profile
