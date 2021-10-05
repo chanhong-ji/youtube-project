@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 
 export const postJoin = async (req, res) => {
-  const { email, username, password, password2, location } = req.body;
+  const { email, name, password, password2, location } = req.body;
   const pageTitle = "Join";
 
   if (password !== password2) {
@@ -15,18 +15,18 @@ export const postJoin = async (req, res) => {
     });
   }
 
-  const exists = await User.exists({ $or: [{ email }, { username }] });
+  const exists = await User.exists({ $or: [{ email }, { name }] });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This email/username is already taken.",
+      errorMessage: "This email/name is already taken.",
     });
   }
 
   try {
     await User.create({
       email,
-      username,
+      name,
       password,
       location,
     });
@@ -133,7 +133,7 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       user = await User.create({
         email: emailObj.email,
-        username: userData.name,
+        name: userData.name,
         socialOnly: true,
         password: "",
         location: userData.location,
@@ -162,7 +162,7 @@ export const postEdit = async (req, res) => {
     session: {
       user: { _id },
     },
-    body: { email, username, location },
+    body: { email, name, location },
   } = req;
 
   if (email !== req.session.user.email) {
@@ -175,12 +175,12 @@ export const postEdit = async (req, res) => {
     }
   }
 
-  if (username !== req.session.user.username) {
-    const takenUsername = await User.exists({ username });
-    if (takenUsername) {
+  if (name !== req.session.user.name) {
+    const takenName = await User.exists({ name });
+    if (takenName) {
       return res.render("edit-profile", {
         pageTitle,
-        errorMessage: "This username is taken",
+        errorMessage: "This name is taken",
       });
     }
   }
@@ -189,7 +189,7 @@ export const postEdit = async (req, res) => {
     _id,
     {
       email,
-      username,
+      name,
       location,
     },
     { new: true }
