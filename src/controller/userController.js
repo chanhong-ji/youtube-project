@@ -127,8 +127,10 @@ export const finishGithubLogin = async (req, res) => {
     }
 
     const user = await User.findOne({ email: emailObj.email });
+    let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       await User.create({
+      user = await User.create({
         email: emailObj.email,
         username: userData.name,
         socialOnly: true,
@@ -152,7 +154,7 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) =>
-  res.render("edit-profile", { pageTitle: c });
+  res.render("edit-profile", { pageTitle: "Edit profile" });
 
 export const postEdit = async (req, res) => {
   const pageTitle = "Edit profile";
