@@ -15,11 +15,11 @@ export const postJoin = async (req, res) => {
     });
   }
 
-  const exists = await User.exists({ email });
+  const exists = await User.exists({ $or: [{ email }, { username }] });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This email is already taken.",
+      errorMessage: "This email/username is already taken.",
     });
   }
 
@@ -150,6 +150,48 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+
 export const getEdit = (req, res) =>
-  res.render("edit-profile", { pageTitle: "Edit profile" });
-export const postEdit = (req, res) => res.send("Edit User");
+  res.render("edit-profile", { pageTitle: c });
+
+export const postEdit = async (req, res) => {
+  const pageTitle = "Edit profile";
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { email, username, location },
+  } = req;
+
+  if (email !== req.session.user.email) {
+    const takenEmail = await User.exists({ email });
+    if (takenEmail) {
+      return res.render("edit-profile", {
+        pageTitle,
+        errorMessage: "This email is already taken",
+      });
+    }
+  }
+
+  if (username !== req.session.user.username) {
+    const takenUsername = await User.exists({ username });
+    if (takenUsername) {
+      return res.render("edit-profile", {
+        pageTitle,
+        errorMessage: "This username is taken",
+      });
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
+};
