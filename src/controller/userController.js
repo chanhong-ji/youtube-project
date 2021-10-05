@@ -30,8 +30,11 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
+    console.log("move to login");
     return res.redirect("/login");
   } catch (error) {
+    console.log("unexpected error");
+    console.log(error);
     return res
       .status(400)
       .render("join", { pageTitle, errorMessage: error._message });
@@ -126,10 +129,8 @@ export const finishGithubLogin = async (req, res) => {
       return res.redirect("/login");
     }
 
-    const user = await User.findOne({ email: emailObj.email });
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
-      await User.create({
       user = await User.create({
         email: emailObj.email,
         username: userData.name,
@@ -138,7 +139,6 @@ export const finishGithubLogin = async (req, res) => {
         location: userData.location,
         avatarUrl: userData.avatar_url,
       });
-      return res.redirect("/");
     }
     req.session.loggedIn = true;
     req.session.user = user;
@@ -197,3 +197,9 @@ export const postEdit = async (req, res) => {
   req.session.user = updatedUser;
   return res.redirect("/users/edit");
 };
+
+export const getChangePassword = (req, res) => {
+  return res.render("change-password", { pageTitle: "Change Password" });
+};
+
+export const postChangePassword = (req, res) => {};
