@@ -144,7 +144,7 @@ export const finishGithubLogin = async (req, res) => {
     req.session.user = user;
     return res.redirect("/");
   } else {
-    return redirect("/login");
+    return res.redirect("/login");
   }
 };
 
@@ -160,9 +160,10 @@ export const postEdit = async (req, res) => {
   const pageTitle = "Edit profile";
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { email, name, location },
+    file,
   } = req;
 
   if (email !== req.session.user.email) {
@@ -188,6 +189,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       email,
       name,
       location,
