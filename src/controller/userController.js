@@ -30,11 +30,8 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
-    console.log("move to login");
     return res.redirect("/login");
   } catch (error) {
-    console.log("unexpected error");
-    console.log(error);
     return res
       .status(400)
       .render("join", { pageTitle, errorMessage: error._message });
@@ -234,4 +231,13 @@ export const postChangePassword = async (req, res) => {
   await user.save();
   req.session.user.password = user.password;
   return res.redirect("/users/change-password");
+};
+
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("profile", { pageTitle: user.name, user });
 };
