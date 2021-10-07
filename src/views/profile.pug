@@ -1,3 +1,7 @@
 extends base
+include mixins/video
 
 block content
+    main
+        each video in user.videos
+            +video(video)
