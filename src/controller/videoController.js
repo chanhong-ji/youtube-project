@@ -110,6 +110,9 @@ export const deleteVideo = async (req, res) => {
   }
 
   await Video.findByIdAndDelete(id);
+  const user = await User.findById(_id);
+  user.videos.splice(user.videos.indexOf(id), 1);
+  user.save();
   return res.redirect("/");
 };
 
