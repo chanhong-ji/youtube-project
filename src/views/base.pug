@@ -3,6 +3,7 @@ html(lang="ko")
     head
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet", href="https://unpkg.com/mvp.css")
+        link(rel="stylesheet", href="/build/css/styles.css")
     body 
         header
             h1=pageTitle
@@ -27,3 +28,4 @@ html(lang="ko")
                         li 
                             a(href="/login") Login 
         block content
+        script(src="/build/js/main.js") 
