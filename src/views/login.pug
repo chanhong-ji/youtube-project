@@ -1,14 +1,13 @@
 extends base
 
 block content 
-    main 
-        if errorMessage 
-            span=errorMessage
-        form(method='post')
-            input(name="email",type="text", required, placeholder="Email address")
-            input(name="password", type="password", required, placeholder="Password")
-            input(type="submit", value="Join")
-            include partials/social-login
-        div.auth-switch
-            span Don't have an account? 
-            a(href="/join") Create one now &rarr; 
+    if errorMessage 
+        span=errorMessage
+    form(method='post')
+        input(name="email",type="text", required, placeholder="Email address")
+        input(name="password", type="password", required, placeholder="Password")
+        input(type="submit", value="Join")
+        include partials/social-login
+    div.auth-switch
+        span Don't have an account? 
+        a(href="/join") Create one now &rarr;

@@ -1,17 +1,16 @@
 extends base
 
 block content 
-    main 
-        if errorMessage 
-            span=errorMessage
-        form(method='post')
-            input(name="email", type="email", required, placeholder="Email address")
-            input(name="name",type="text", required, placeholder="Name")
-            input(name="password", type="password", required, placeholder="Password")
-            input(name="password2", type="password", required, placeholder="Confirm Password")
-            input(name="location", type='text', placeholder="Location")
-            input(type="submit", value="Join")
-            include partials/social-login
-        div
-            span Already have an account? 
-            a(href="/login") Log in now &rarr;
+    if errorMessage 
+        span=errorMessage
+    form(method='post')
+        input(name="email", type="email", required, placeholder="Email address")
+        input(name="name",type="text", required, placeholder="Name")
+        input(name="password", type="password", required, placeholder="Password")
+        input(name="password2", type="password", required, placeholder="Confirm Password")
+        input(name="location", type='text', placeholder="Location")
+        input(type="submit", value="Join")
+        include partials/social-login
+    div
+        span Already have an account? 
+        a(href="/login") Log in now &rarr;

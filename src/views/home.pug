@@ -3,9 +3,8 @@ include mixins/video
 
 
 block content
-    main
-        div.video-grid
-            each video in videos
-                +video(video)
-            else 
-                span.empty__message No videos found
+    div.video-grid
+        each video in videos
+            +video(video)
+        else 
+            span.empty__message No videos found
