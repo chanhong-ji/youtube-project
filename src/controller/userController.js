@@ -1,4 +1,5 @@
 import User from "../model/User";
+import Video from "../model/Video";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
