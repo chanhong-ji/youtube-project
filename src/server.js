@@ -4,6 +4,7 @@ import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRrouter";
 import videoRouter from "./routers/videoRouter";
+import apiRouter from "./routers/apiRouter";
 import { localMiddleware } from "./middlewares";
 import MongoStore from "connect-mongo";
 
@@ -26,6 +27,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/build", express.static("build"));
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
+app.use("/api", apiRouter);
 app.use(morgan("common"));
 
 export default app;
