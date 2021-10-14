@@ -24,7 +24,16 @@ app.use(
 app.use(localMiddleware);
 app.use("/", rootRouter);
 app.use("/uploads", express.static("uploads"));
-app.use("/build", express.static("build"));
+app.use(
+  "/build",
+  express.static("build"),
+  express.static("node_modules/@ffmpeg/core/dist")
+);
+app.use((req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 app.use("/api", apiRouter);
