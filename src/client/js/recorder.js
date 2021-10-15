@@ -50,11 +50,19 @@ const onDownload = async () => {
   document.body.appendChild(a);
   a.click();
 
-  const thumbnail = document.createElement("a");
-  thumbnail.href = thumbUrl;
-  thumbnail.download = "MyThumbnail.jpg";
-  document.body.appendChild(thumbnail);
-  thumbnail.click();
+  const thumbA = document.createElement("a");
+  thumbA.href = thumbUrl;
+  thumbA.download = "MyThumbnail.jpg";
+  document.body.appendChild(thumbA);
+  thumbA.click();
+
+  ffmpeg.FS("unlink", "MyRecording.mp4");
+  ffmpeg.FS("unlink", "MyThumbnail.jpg");
+  ffmpeg.FS("unlink", "recording.webm");
+
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(videoFile);
 };
 
 const onStop = () => {
