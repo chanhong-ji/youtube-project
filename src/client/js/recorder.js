@@ -15,7 +15,10 @@ const files = {
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
   });
   video.srcObject = stream;
   video.play();
@@ -78,17 +81,9 @@ const onDownload = async () => {
   actionBtn.addEventListener("click", onStart);
 };
 
-const onStop = () => {
-  actionBtn.innerText = "Download Recording";
-  actionBtn.removeEventListener("click", onStop);
-  actionBtn.addEventListener("click", onDownload);
-  recorder.stop();
-};
-
 const onStart = () => {
-  actionBtn.innerText = "Stop Recording";
+  actionBtn.disabled = true;
   actionBtn.removeEventListener("click", onStart);
-  actionBtn.addEventListener("click", onStop);
   recorder = new MediaRecorder(stream);
   recorder.ondataavailable = (event) => {
     videoFile = URL.createObjectURL(event.data);
@@ -96,8 +91,14 @@ const onStart = () => {
     video.src = videoFile;
     video.loop = true;
     video.play();
+    actionBtn.innerText = "Download Recording";
+    actionBtn.disabled = false;
+    actionBtn.addEventListener("click", onDownload);
   };
   recorder.start();
+  setTimeout(() => {
+    recorder.stop();
+  }, 3000);
 };
 
 actionBtn.addEventListener("click", onStart);
