@@ -6,13 +6,17 @@ const btn = form.querySelector("button");
 const addComment = (text) => {
   const comments = document.querySelector(".video__comments ul");
   const newComment = document.createElement("li");
+  newComment.dataset.id = id;
   newComment.className = "video__comment";
   const i = document.createElement("i");
   i.className = "fas fa-comment";
   const span = document.createElement("span");
   span.innerText = ` ${text}`;
+  const span2 = document.createElement("span");
+  span2.innerText = "❌";
   newComment.appendChild(i);
   newComment.appendChild(span);
+  newComment.appendChild(span2);
   comments.prepend(newComment);
 };
 
@@ -23,7 +27,8 @@ const onSubmit = async (event) => {
   if (text.trim() === "") {
     return;
   }
-  const { status } = await fetch(`/api/videos/${videoId}/comment`, {
+
+  const response = await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,8 +36,10 @@ const onSubmit = async (event) => {
     body: JSON.stringify({ text }),
   });
   textarea.value = "";
-  if (status === 201) {
-    addComment(text);
+
+  if (response.status === 201) {
+    const { commentId } = await response.json();
+    addComment(text, commentId);
   } else {
     console.log("fail");
   }
