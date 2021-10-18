@@ -178,4 +178,25 @@ export const createComment = async (req, res) => {
 
   return res.status(201).json({ commentId: comment._id });
 };
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+
+  const comment = await Comment.findById(id);
+  const video = await Video.findById(comment.video);
+  const user = await User.findById(comment.owner);
+
+  if (String(user._id) !== req.session.user._id) {
+    req.flash("error", "Not authorized");
+    return res.redirect(`/videos/${video._id}`);
+  }
+
+  await video.comments.remove({ _id: id });
+  video.save();
+  await user.comments.remove({ _id: id });
+  user.save();
+
+  return res.sendStatus(200);
 };
