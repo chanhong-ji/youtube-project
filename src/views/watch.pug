@@ -18,6 +18,21 @@ block content
                     i.fas.fa-volume-up
                 span#fullScreen
                     i.fas.fa-expand
+    div
+        small Uploaded by 
+        a(href=`/users/${video.owner._id}`)=video.owner.name
+        if String(video.owner._id) === String(loggedInUser._id)
+            div
+                a(href=`${video.id}/edit`) Edit Video &rarr;
+                br
+                a(href=`${video.id}/delete`) Delete Video &rarr;
+    if loggedIn
+        div.video__comments
+            form.video__comment-form#commentForm
+                textarea(cols="30", rows="10", placeholder="Write a nice comment")
+                button Add Comment
 
 block scripts
     script(src="/build/js/videoPlayer.js")
+    if loggedIn
+        script(src="/build/js/commentSection.js")
