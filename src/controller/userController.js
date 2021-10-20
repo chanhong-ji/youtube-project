@@ -134,7 +134,7 @@ export const finishGithubLogin = async (req, res) => {
     if (!user) {
       user = await User.create({
         email: emailObj.email,
-        name: userData.name,
+        name: userData.name || Math.random().toString(36).substr(2, 16),
         socialOnly: true,
         password: "",
         location: userData.location,
@@ -203,7 +203,8 @@ export const postEdit = async (req, res) => {
     { new: true }
   );
   req.session.user = updatedUser;
-  return res.redirect("/users/edit");
+  req.flash("success", "Your profile has been successfully changed.");
+  return res.redirect("/");
 };
 
 export const getChangePassword = (req, res) => {
