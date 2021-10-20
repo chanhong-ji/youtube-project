@@ -1,11 +1,42 @@
 header {
+  height: 8vh;
   padding: 20px 50px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  border-bottom: 1px solid white;
   .header__logo {
     color: $red;
     font-size: 38px;
+  }
+  .search__form-container {
+    flex-grow: 1;
+    .search__form {
+      width: 70%;
+      position: relative;
+      input {
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: black;
+        margin-bottom: 5px;
+        font-size: 16px;
+        color: white;
+      }
+      button {
+        all: unset;
+        font-size: 18px;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
   }
   ul {
     display: flex;

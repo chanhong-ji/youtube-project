@@ -1,11 +1,13 @@
 header
     a(href="/").header__logo
         i.fab.fa-youtube
+    div.search__form-container
+        form(method="GET", action="/search").search__form
+            input(type="text", required, placeholder="Search by text", name="keyword")
+            button
+                i.fas.fa-search
     nav
         ul
-            li 
-                a(href="/search")
-                    i.fas.fa-search
             if loggedIn
                 li
                     a(href="/videos/upload") Upload Video
