@@ -1,6 +1,7 @@
 import User from "../model/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+let fromJoin = null;
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 
@@ -76,6 +77,9 @@ export const startGithubLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+  if (req.headers.referer.split("/").pop() == "join") {
+    fromJoin = true;
+  }
   return res.redirect(finalUrl);
 };
 
@@ -126,7 +130,6 @@ export const finishGithubLogin = async (req, res) => {
     if (!emailObj) {
       return res.redirect("/login");
     }
-
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       user = await User.create({
@@ -137,11 +140,16 @@ export const finishGithubLogin = async (req, res) => {
         location: userData.location,
         avatarUrl: userData.avatar_url,
       });
+    } else if (fromJoin) {
+      fromJoin = false;
+      req.flash("info", "You already have an account. Please log in.");
+      return res.redirect("/login");
     }
     req.session.loggedIn = true;
     req.session.user = user;
     return res.redirect("/");
   } else {
+    req.flash("error", "Unable to create an account.");
     return res.redirect("/login");
   }
 };
