@@ -108,8 +108,35 @@ const onMouseLeave = () => {
 };
 
 const onKeyPress = (event) => {
-  if (!document.fullscreenElement && event.key === "f") {
-    onFullScreen();
+  const key = event.key;
+  if (event.target.tagName === "TEXTAREA") {
+    return;
+  }
+
+  if (event.code === "Space") {
+    event.preventDefault();
+    return onPlayClick();
+  }
+
+  if (!document.fullscreenElement && key === "f") {
+    return onFullScreen();
+  }
+
+  if (event.target === videoContainer) {
+    event.preventDefault();
+    if (key === "ArrowUp") {
+      video.volume =
+        video.volume == 1 ? 1 : (video.volume + 0.1).toPrecision(2);
+      volumeRange.value = video.volume;
+    } else if (key === "ArrowDown") {
+      video.volume =
+        video.volume == 0 ? 0 : (video.volume - 0.1).toPrecision(2);
+      volumeRange.value = video.volume;
+    } else if (key === "ArrowLeft") {
+      video.currentTime -= 5;
+    } else if (key === "ArrowRight") {
+      video.currentTime += 5;
+    }
   }
 };
 
