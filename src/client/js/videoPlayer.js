@@ -17,10 +17,20 @@ let controlsTimeout = null;
 let controlsMovementTimeout = null;
 
 const onPlayClick = (event) => {
+  if (
+    event.target.id !== "videoContainer" &&
+    event.currentTarget.id !== "play"
+  ) {
+    console.log("returned");
+    return;
+  }
+
   if (video.paused) {
     video.play();
+    videoContainer.classList.remove("cover");
   } else {
     video.pause();
+    videoContainer.classList.add("cover");
   }
   playBtnIcon.className = video.paused ? "fas fa-play" : "fas fa-pause";
 };
@@ -122,6 +132,13 @@ const onKeyPress = (event) => {
     return onFullScreen();
   }
 
+  if (key === "ArrowLeft") {
+    video.currentTime -= 5;
+  }
+  if (key === "ArrowRight") {
+    video.currentTime += 5;
+  }
+
   if (event.target === videoContainer) {
     event.preventDefault();
     if (key === "ArrowUp") {
@@ -132,10 +149,6 @@ const onKeyPress = (event) => {
       video.volume =
         video.volume == 0 ? 0 : (video.volume - 0.1).toPrecision(2);
       volumeRange.value = video.volume;
-    } else if (key === "ArrowLeft") {
-      video.currentTime -= 5;
-    } else if (key === "ArrowRight") {
-      video.currentTime += 5;
     }
   }
 };
@@ -143,6 +156,7 @@ const onKeyPress = (event) => {
 const onEnded = () => {
   const { id } = videoContainer.dataset;
   fetch(`/api/videos/${id}/view`, { method: "POST" });
+  videoContainer.classList.add("cover");
 };
 
 playBtn.addEventListener("click", onPlayClick);
@@ -150,7 +164,7 @@ muteBtn.addEventListener("click", onMuteClick);
 volumeRange.addEventListener("input", onVolumeChange);
 video.addEventListener("loadeddata", onLoadedMetaData);
 video.addEventListener("timeupdate", onTimeUpdate);
-video.addEventListener("click", onPlayClick);
+videoContainer.addEventListener("click", onPlayClick);
 video.addEventListener("ended", onEnded);
 videoContainer.addEventListener("mousemove", onMouseMove);
 videoContainer.addEventListener("mouseleave", onMouseLeave);

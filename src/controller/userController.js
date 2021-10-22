@@ -128,6 +128,7 @@ export const finishGithubLogin = async (req, res) => {
     );
 
     if (!emailObj) {
+      req.flash("error", "There's no authenticated email.");
       return res.redirect("/login");
     }
     let user = await User.findOne({ email: emailObj.email });
@@ -140,7 +141,12 @@ export const finishGithubLogin = async (req, res) => {
         location: userData.location,
         avatarUrl: userData.avatar_url,
       });
-    } else if (fromJoin) {
+    } else if (user.socialOnly == false) {
+      req.flash("info", "Your account has been converted to github account.");
+      user.socialOnly = true;
+      user.password = "";
+      user.save();
+    } else if (user.socialOnly == true && fromJoin) {
       fromJoin = false;
       req.flash("info", "You already have an account. Please log in.");
       return res.redirect("/login");

@@ -1,12 +1,18 @@
 #videoContainer {
   width: 100%;
   position: relative;
+  height: 576px;
+  width: 1024px;
   video {
-    width: 100%;
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    z-index: -1;
   }
   .videoControls {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    z-index: 100;
     &.showing {
       opacity: 1;
     }
@@ -48,4 +54,8 @@
       }
     }
   }
+}
+
+.cover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
