@@ -18,19 +18,17 @@ let controlsMovementTimeout = null;
 
 const onPlayClick = (event) => {
   if (
+    event == PointerEvent &&
     event.target.id !== "videoContainer" &&
     event.currentTarget.id !== "play"
   ) {
-    console.log("returned");
     return;
   }
 
   if (video.paused) {
     video.play();
-    videoContainer.classList.remove("cover");
   } else {
     video.pause();
-    videoContainer.classList.add("cover");
   }
   playBtnIcon.className = video.paused ? "fas fa-play" : "fas fa-pause";
 };
@@ -123,6 +121,9 @@ const onKeyPress = (event) => {
     return;
   }
 
+  if (event.code == "F5") {
+    return location.reload();
+  }
   if (event.code === "Space") {
     event.preventDefault();
     return onPlayClick();
@@ -156,7 +157,6 @@ const onKeyPress = (event) => {
 const onEnded = () => {
   const { id } = videoContainer.dataset;
   fetch(`/api/videos/${id}/view`, { method: "POST" });
-  videoContainer.classList.add("cover");
 };
 
 playBtn.addEventListener("click", onPlayClick);

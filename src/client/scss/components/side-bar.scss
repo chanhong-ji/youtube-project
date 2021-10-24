@@ -1,0 +1,27 @@
+.side-bar {
+  top: 0;
+  padding-top: 70px;
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.246);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  z-index: 2;
+  transform: translate(-170px);
+  li {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 10px;
+    color: $text;
+    font-size: 20px;
+    border-bottom: 1px solid $line;
+    span {
+      margin-right: 10px;
+    }
+  }
+}

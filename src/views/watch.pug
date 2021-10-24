@@ -1,7 +1,7 @@
 extends base
 
 block content
-    div#videoContainer(data-id=video._id, tabindex="100")
+    div#videoContainer(data-id=video._id, tabindex="100").video-container
         video(src=`/${video.videoUrl}`)
         div#videoControls.videoControls
             div.videoControls__play
@@ -18,29 +18,44 @@ block content
                     i.fas.fa-volume-up
                 span#fullScreen
                     i.fas.fa-expand
-    div
-        small Uploaded by 
-        a(href=`/users/${video.owner._id}`)=video.owner.name
-        if String(video.owner._id) === String(loggedInUser._id)
+    div.info
+        div.video-info
+            each hashtag in video.hashtags
+                span.hash=hashtag
+            span.video-info__title=video.title
+            span.video-info__views=video.meta.views
+            span.video-info__createdAt=video.createdAt
+            if String(video.owner._id) === String(loggedInUser._id)
+                div.only-owner
+                    a(href=`${video.id}/edit`) Edit Video
+                    br
+                    a(href=`${video.id}/delete`) Delete Video
+        div.owner-info
             div
-                a(href=`${video.id}/edit`) Edit Video &rarr;
-                br
-                a(href=`${video.id}/delete`) Delete Video &rarr;
+                div.owner-info__avatar(style=`background-image:url(${avatarUrl})`)
+                a(href=`/users/${video.owner._id}`)=video.owner.name
+            p=video.description
+
     if loggedIn
-        div.video__comments
-            form.video__comment-form#commentForm
-                textarea(cols="30", rows="10", placeholder="Write a nice comment")
-                button Add Comment
+        div.video__comments-form-div
+            h3 댓글 #{video.comments.length}개
+            div
+                article(style=`background-image:url(${loggedInUser.avatarUrl})`)
+                form.video__comment-form#commentForm
+                    textarea(cols="30", rows="1", placeholder="Write a nice comment")
+                    button Add Comment
+
     div.video__comments
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment._id)
                     i.fas.fa-comment
-                    span  #{comment.text}
+                    span.text  #{comment.text}
                     if String(comment.owner._id) == loggedInUser._id
-                        span ❌
+                        span.delete ❌
 
 block scripts
     script(src="/build/js/videoPlayer.js")
+    script(src="/build/js/watch.js")
     if loggedIn
         script(src="/build/js/commentSection.js")

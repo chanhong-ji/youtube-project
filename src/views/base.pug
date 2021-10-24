@@ -15,8 +15,10 @@ html(lang="ko")
             +message("info", messages.info)
 
         include partials/header
+        include partials/side-bar
         main 
             block content
         include partials/footer
     script(src="/build/js/main.js") 
+    script(src="/build/js/base.js")
     block scripts

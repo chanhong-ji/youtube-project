@@ -1,9 +1,9 @@
 form {
   margin: 0 auto;
-  &:not(.search__form) {
+  &:not(.search__form, .video__comment-form) {
     max-width: 420px;
     padding: 30px;
-    background-color: rgba($color: $bg, $alpha: 0.7);
+    background-color: grey;
     border-radius: 10px;
     border: 1px solid rgba($color: #fff, $alpha: 0.1);
   }

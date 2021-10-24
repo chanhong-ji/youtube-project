@@ -1,6 +1,9 @@
 header
+    span.menu-btn
+        i.fas.fa-bars.fa-xl
     a(href="/").header__logo
         i.fab.fa-youtube
+        span Wetube
     div.search__form-container
         form(method="GET", action="/search").search__form
             input(type="text", required, placeholder="Search by text", name="keyword")
@@ -12,7 +15,7 @@ header
                 li
                     a(href="/videos/upload") Upload Video
                 li
-                    a(href=`/users/${loggedInUser._id}`) #{loggedInUser.name}의 Profile
+                    a(href=`/users/${loggedInUser._id}`) My Profile
                 li 
                     a(href="/users/edit") Edit profile
                 li 

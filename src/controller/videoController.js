@@ -18,6 +18,7 @@ export const watch = async (req, res) => {
   return res.render("watch", {
     pageTitle: video.title,
     video,
+    avatarUrl: "/" + video.owner.avatarUrl.replace(/\\/gi, "/"),
   });
 };
 

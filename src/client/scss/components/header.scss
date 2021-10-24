@@ -1,6 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap");
 header {
-  height: 8vh;
-  padding: 20px 50px;
+  height: 70px;
+  padding: 20px 50px 20px 20px;
   display: flex;
   align-items: center;
   position: fixed;
@@ -8,10 +9,31 @@ header {
   left: 0;
   box-sizing: border-box;
   width: 100%;
-  border-bottom: 1px solid white;
+  z-index: 3;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.246);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  .menu-btn {
+    margin-right: 20px;
+    &:hover {
+      cursor: grab;
+    }
+  }
   .header__logo {
+    display: flex;
+    align-items: center;
     color: $red;
     font-size: 38px;
+    span {
+      font-family: "Rubik", sans-serif;
+      color: $text;
+      font-size: 30px;
+      margin-left: 10px;
+    }
   }
   .search__form-container {
     flex-grow: 1;
@@ -21,11 +43,13 @@ header {
       input {
         width: 100%;
         border-radius: 5px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        background-color: black;
+        background: rgba(255, 255, 255, 0.5);
         margin-bottom: 5px;
         font-size: 16px;
-        color: white;
+        color: $text;
+        &::placeholder {
+          color: grey;
+        }
       }
       button {
         all: unset;
@@ -54,7 +78,6 @@ header {
   }
   .header__btn {
     background-color: white;
-    color: $bg;
     padding: 5px 10px;
     border-radius: 5px;
   }
@@ -63,4 +86,8 @@ header {
     height: 40px;
     border-radius: 50%;
   }
+}
+
+.showing {
+  display: none;
 }
