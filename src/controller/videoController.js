@@ -15,10 +15,14 @@ export const watch = async (req, res) => {
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
+  const dateList = String(video.createdAt).split(" ");
+  const date = dateList[3] + ". " + dateList[1] + ". " + dateList[2];
   return res.render("watch", {
     pageTitle: video.title,
     video,
     avatarUrl: "/" + video.owner.avatarUrl.replace(/\\/gi, "/"),
+    userAvatarUrl: "/" + req.session.user.avatarUrl.replace(/\\/gi, "/"),
+    date,
   });
 };
 
@@ -155,7 +159,7 @@ export const createComment = async (req, res) => {
     params: { id },
     body: { text },
     session: {
-      user: { _id },
+      user: { _id, name },
     },
   } = req;
 
@@ -170,14 +174,15 @@ export const createComment = async (req, res) => {
     text,
     video: id,
     owner: _id,
+    name,
   });
 
   user.comments.push(comment._id);
   user.save();
   video.comments.push(comment._id);
   video.save();
-
-  return res.status(201).json({ commentId: comment._id });
+  console.log(name);
+  return res.status(201).json({ commentId: comment._id, commentName: name });
 };
 
 export const deleteComment = async (req, res) => {

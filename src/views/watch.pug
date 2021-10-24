@@ -6,7 +6,7 @@ block content
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
-                    i.fas.fa-play
+                    i.fas.fa-play.fa-xl
                 div.videoControls__time
                     span#currentTime 00:00
                     span /
@@ -23,8 +23,8 @@ block content
             each hashtag in video.hashtags
                 span.hash=hashtag
             span.video-info__title=video.title
-            span.video-info__views=video.meta.views
-            span.video-info__createdAt=video.createdAt
+            span.video-info__views 조회수 #{video.meta.views}
+            span.video-info__createdAt   • #{date}
             if String(video.owner._id) === String(loggedInUser._id)
                 div.only-owner
                     a(href=`${video.id}/edit`) Edit Video
@@ -40,7 +40,7 @@ block content
         div.video__comments-form-div
             h3 댓글 #{video.comments.length}개
             div
-                article(style=`background-image:url(${loggedInUser.avatarUrl})`)
+                article(style=`background-image:url(${userAvatarUrl})`)
                 form.video__comment-form#commentForm
                     textarea(cols="30", rows="1", placeholder="Write a nice comment")
                     button Add Comment
@@ -49,8 +49,11 @@ block content
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment._id)
-                    i.fas.fa-comment
-                    span.text  #{comment.text}
+                    div.avatar
+                    div.text-box
+                        div
+                            span=comment.name
+                        div.text=comment.text
                     if String(comment.owner._id) == loggedInUser._id
                         span.delete ❌
 

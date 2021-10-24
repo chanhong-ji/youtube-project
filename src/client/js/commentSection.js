@@ -5,18 +5,26 @@ const btn = form.querySelector("button");
 const comments = document.querySelector(".video__comments ul");
 const commentList = comments.querySelectorAll("li");
 
-const addComment = (text, id) => {
+const addComment = (text, id, name) => {
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
-  const i = document.createElement("i");
-  i.className = "fas fa-comment";
-  const span = document.createElement("span");
-  span.innerText = ` ${text}`;
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  const textBox = document.createElement("div");
+  textBox.className = "text-box";
+  const textBoxBox = document.createElement("div");
+  const textBoxBoxSpan = document.createElement("span");
+  textBoxBoxSpan.innerText = name;
+  const textBoxText = document.createElement("div");
+  textBoxText.innerText = ` ${text}`;
   const span2 = document.createElement("span");
   span2.innerText = "❌";
-  newComment.appendChild(i);
-  newComment.appendChild(span);
+  newComment.appendChild(avatar);
+  newComment.appendChild(textBox);
+  textBox.appendChild(textBoxBox);
+  textBoxBox.appendChild(textBoxBoxSpan);
+  textBox.appendChild(textBoxText);
   newComment.appendChild(span2);
   comments.prepend(newComment);
   span2.addEventListener("click", onDeleteBtnClick);
@@ -40,10 +48,8 @@ const onSubmit = async (event) => {
   textarea.value = "";
 
   if (response.status === 201) {
-    const { commentId } = await response.json();
-    addComment(text, commentId);
-  } else {
-    console.log("fail");
+    const { commentId, commentName } = await response.json();
+    addComment(text, commentId, commentName);
   }
 };
 
