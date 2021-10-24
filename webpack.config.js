@@ -18,7 +18,6 @@ module.exports = {
     clean: true,
   },
   mode: "development",
-  watch: true,
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
