@@ -10,14 +10,12 @@ module.exports = {
     recorder: BASE_JS + "recorder.js",
     commentSection: BASE_JS + "commentSection.js",
     base: BASE_JS + "base.js",
-    watch: BASE_JS + "watch.js",
   },
   output: {
     filename: "js/[name].js",
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "assets"),
     clean: true,
   },
-  mode: "development",
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",

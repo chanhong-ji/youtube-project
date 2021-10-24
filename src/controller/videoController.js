@@ -2,6 +2,8 @@ import User from "../model/User";
 import Video from "../model/Video";
 import Comment from "../model/Comment";
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 export const home = async (req, res) => {
   const videos = await Video.find({})
     .sort({ createdAt: "desc" })
@@ -20,8 +22,6 @@ export const watch = async (req, res) => {
   return res.render("watch", {
     pageTitle: video.title,
     video,
-    avatarUrl: "/" + video.owner.avatarUrl.replace(/\\/gi, "/"),
-    userAvatarUrl: "/" + req.session.user.avatarUrl.replace(/\\/gi, "/"),
     date,
   });
 };
@@ -85,8 +85,10 @@ export const postUpload = async (req, res) => {
   } = req;
   try {
     const newVideo = await Video.create({
-      videoUrl: video[0].path,
-      thumbUrl: thumb[0].destination + "/" + thumb[0].filename,
+      videoUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku
+        ? thumb[0].location
+        : thumb[0].destination + "/" + thumb[0].filename,
       title,
       description,
       hashtags: Video.formatHashtags(hashtags),
@@ -181,7 +183,6 @@ export const createComment = async (req, res) => {
   user.save();
   video.comments.push(comment._id);
   video.save();
-  console.log(name);
   return res.status(201).json({ commentId: comment._id, commentName: name });
 };
 

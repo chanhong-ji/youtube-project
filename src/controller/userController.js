@@ -2,6 +2,7 @@ import User from "../model/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 let fromJoin = null;
+const isHeroku = process.env.NODE_ENV === "production";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 
@@ -65,13 +66,14 @@ export const postLogin = async (req, res) => {
 
   req.session.loggedIn = true;
   req.session.user = user;
+  req.flash("info", "Login");
   return res.redirect("/");
 };
 
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
-    client_id: process.env.GH_CLIENT,
+    client_id: isHeroku ? process.env.GH_CLIENT : process.env.GH_CLIENT_TEST,
     allow_signup: false,
     scope: "read:user user:email",
   };
@@ -86,8 +88,10 @@ export const startGithubLogin = (req, res) => {
 export const finishGithubLogin = async (req, res) => {
   const baseUrl = "https://github.com/login/oauth/access_token";
   const config = {
-    client_id: process.env.GH_CLIENT,
-    client_secret: process.env.GH_SECRET,
+    client_id: isHeroku ? process.env.GH_CLIENT : process.env.GH_CLIENT_TEST,
+    client_secret: isHeroku
+      ? process.env.GH_SECRET
+      : process.env.GH_SECRET_TEST,
     code: req.query.code,
   };
   const params = new URLSearchParams(config).toString();
@@ -197,11 +201,10 @@ export const postEdit = async (req, res) => {
       });
     }
   }
-
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       email,
       name,
       location,

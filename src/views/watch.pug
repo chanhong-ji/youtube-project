@@ -2,7 +2,7 @@ extends base
 
 block content
     div#videoContainer(data-id=video._id, tabindex="100").video-container
-        video(src=`/${video.videoUrl}`)
+        video(src=video.videoUrl)
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
@@ -32,7 +32,7 @@ block content
                     a(href=`${video.id}/delete`) Delete Video
         div.owner-info
             div
-                div.owner-info__avatar(style=`background-image:url(${avatarUrl})`)
+                img.owner-info__avatar(src=video.owner.avatarUrl, crossorigin)
                 a(href=`/users/${video.owner._id}`)=video.owner.name
             p=video.description
 
@@ -58,7 +58,6 @@ block content
                         span.delete ❌
 
 block scripts
-    script(src="/build/js/videoPlayer.js")
-    script(src="/build/js/watch.js")
+    script(src="/static/js/videoPlayer.js")
     if loggedIn
-        script(src="/build/js/commentSection.js")
+        script(src="/static/js/commentSection.js")

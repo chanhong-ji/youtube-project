@@ -1,7 +1,8 @@
 /node_modules 
+.history/
 package-lock.json
 .env
 *.txt
 /uploads
 /build
-/result
+/assets

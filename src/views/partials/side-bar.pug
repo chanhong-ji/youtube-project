@@ -4,11 +4,12 @@ div.side-bar
             span
                 i.fas.fa-home
             a(href="/") Home
-        li
-            span
-                i.fas.fa-address-book
-            a(href=`/users/${loggedInUser._id}`) My Profile
-        li
-            span
-                i.fas.fa-user-edit
-            a(href="/users/edit") Edit profile
+        if loggedIn 
+            li
+                span
+                    i.fas.fa-address-book
+                a(href=`/users/${loggedInUser._id}`) My Profile
+            li
+                span
+                    i.fas.fa-user-edit
+                a(href="/users/edit") Edit profile
