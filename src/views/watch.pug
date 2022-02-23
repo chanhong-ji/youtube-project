@@ -40,7 +40,7 @@ block content
         div.video__comments-form-div
             h3 댓글 #{video.comments.length}개
             div
-                article(style=`background-image:url(${userAvatarUrl})`)
+                article(style=`background-image:url(${loggedInUser.avatarUrl})`)
                 form.video__comment-form#commentForm
                     textarea(cols="30", rows="1", placeholder="Write a nice comment")
                     button Add Comment
