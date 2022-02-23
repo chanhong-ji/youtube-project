@@ -5,29 +5,32 @@ const btn = form.querySelector("button");
 const comments = document.querySelector(".video__comments ul");
 const commentList = comments.querySelectorAll("li");
 
-const addComment = (text, id, name) => {
+const addComment = (text, id, name, avatarUrl) => {
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
+  const avatarImg = document.createElement("img");
+  avatarImg.src = avatarUrl;
+  avatarImg.alt = "";
+  avatarImg.crossOrigin = true;
   const textBox = document.createElement("div");
   textBox.className = "text-box";
   const textBoxBox = document.createElement("div");
   const textBoxBoxSpan = document.createElement("span");
   textBoxBoxSpan.innerText = name;
   const textBoxText = document.createElement("div");
+  textBoxText.className = "text";
   textBoxText.innerText = ` ${text}`;
-  const span2 = document.createElement("span");
-  span2.innerText = "❌";
-  newComment.appendChild(avatar);
+  const deleteSpan = document.createElement("span");
+  deleteSpan.innerText = "❌";
+  newComment.appendChild(avatarImg);
   newComment.appendChild(textBox);
   textBox.appendChild(textBoxBox);
   textBoxBox.appendChild(textBoxBoxSpan);
   textBox.appendChild(textBoxText);
-  newComment.appendChild(span2);
+  newComment.appendChild(deleteSpan);
   comments.prepend(newComment);
-  span2.addEventListener("click", onDeleteBtnClick);
+  deleteSpan.addEventListener("click", onDeleteBtnClick);
 };
 
 const onSubmit = async (event) => {
@@ -48,8 +51,8 @@ const onSubmit = async (event) => {
   textarea.value = "";
 
   if (response.status === 201) {
-    const { commentId, commentName } = await response.json();
-    addComment(text, commentId, commentName);
+    const { commentId, commentName, commentAvatar } = await response.json();
+    addComment(text, commentId, commentName, commentAvatar);
   }
 };
 

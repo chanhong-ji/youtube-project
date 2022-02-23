@@ -183,7 +183,13 @@ export const createComment = async (req, res) => {
   user.save();
   video.comments.push(comment._id);
   video.save();
-  return res.status(201).json({ commentId: comment._id, commentName: name });
+  return res
+    .status(201)
+    .json({
+      commentId: comment._id,
+      commentName: name,
+      commentAvatar: comment.avatarUrl,
+    });
 };
 
 export const deleteComment = async (req, res) => {
