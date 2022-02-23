@@ -85,15 +85,14 @@ export const postUpload = async (req, res) => {
   } = req;
   try {
     const newVideo = await Video.create({
-      videoUrl: isHeroku ? video[0].location : video[0].path,
-      thumbUrl: isHeroku
-        ? thumb[0].location
-        : thumb[0].destination + "/" + thumb[0].filename,
+      videoUrl: isHeroku ? video[0].location : "/" + video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : "/" + thumb[0].path,
       title,
       description,
       hashtags: Video.formatHashtags(hashtags),
       owner: _id,
     });
+
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
