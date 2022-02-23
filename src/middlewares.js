@@ -13,13 +13,13 @@ const isHeroku = process.env.NODE_ENV === "production";
 
 const s3ImageUploader = multerS3({
   s3: s3,
-  bucket: "youtube-project-ji/images",
+  bucket: "ji-wetubeee/images",
   acl: "public-read",
 });
 
 const s3VideoUploader = multerS3({
   s3: s3,
-  bucket: "youtube-project-ji/videos",
+  bucket: "ji-wetubeee/videos",
   acl: "public-read",
 });
 
