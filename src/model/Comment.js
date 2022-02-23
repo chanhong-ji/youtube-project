@@ -6,6 +6,7 @@ const commentSchema = new mongoose.Schema({
   video: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Video" },
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
   name: { type: String, required: true },
+  avatarUrl: { type: String },
 });
 
 const Comment = mongoose.model("Comment", commentSchema);

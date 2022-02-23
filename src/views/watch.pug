@@ -40,7 +40,6 @@ block content
         div.video__comments-form-div
             h3 댓글 #{video.comments.length}개
             div
-                //-article 에서 이미지로 변경하기 
                 img(src=loggedInUser.avatarUrl, crossorigin)
                 form.video__comment-form#commentForm
                     textarea(cols="30", rows="1", placeholder="Write a nice comment")
@@ -50,7 +49,7 @@ block content
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment._id)
-                    div.avatar
+                    img(src=comment.avatarUrl, crossorigin)
                     div.text-box
                         div
                             span=comment.name
