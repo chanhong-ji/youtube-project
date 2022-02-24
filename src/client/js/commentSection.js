@@ -15,20 +15,22 @@ const addComment = (text, id, name, avatarUrl) => {
   avatarImg.crossOrigin = true;
   const textBox = document.createElement("div");
   textBox.className = "text-box";
-  const textBoxBox = document.createElement("div");
-  const textBoxBoxSpan = document.createElement("span");
-  textBoxBoxSpan.innerText = name;
+  const textBoxName = document.createElement("div");
+  textBoxName.className = "name";
+  const textBoxNameText = document.createElement("span");
+  textBoxNameText.innerText = name;
   const textBoxText = document.createElement("div");
   textBoxText.className = "text";
   textBoxText.innerText = ` ${text}`;
   const deleteSpan = document.createElement("span");
-  deleteSpan.innerText = "❌";
+  deleteSpan.className = "delete";
+  deleteSpan.innerText = "✖";
   newComment.appendChild(avatarImg);
   newComment.appendChild(textBox);
-  textBox.appendChild(textBoxBox);
-  textBoxBox.appendChild(textBoxBoxSpan);
+  textBox.appendChild(textBoxName);
+  textBoxName.appendChild(textBoxNameText);
+  textBoxName.appendChild(deleteSpan);
   textBox.appendChild(textBoxText);
-  newComment.appendChild(deleteSpan);
   comments.prepend(newComment);
   deleteSpan.addEventListener("click", onDeleteBtnClick);
 };
@@ -57,8 +59,9 @@ const onSubmit = async (event) => {
 };
 
 const onDeleteBtnClick = async (event) => {
-  const li = event.target.parentElement;
+  const li = event.target.parentElement.parentElement.parentElement;
   const commentId = li.dataset.id;
+  console.log("comment li id: ", commentId);
   const response = await fetch(`/api/comments/${commentId}`, {
     method: "DELETE",
   });
@@ -69,7 +72,7 @@ const onDeleteBtnClick = async (event) => {
 
 form.addEventListener("submit", onSubmit);
 commentList.forEach((comment) => {
-  const deleteBtn = comment.querySelector("span:nth-child(3)");
+  const deleteBtn = comment.querySelector(".name span:nth-child(2)");
   if (deleteBtn) {
     deleteBtn.addEventListener("click", onDeleteBtnClick);
   }

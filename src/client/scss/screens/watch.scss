@@ -1,14 +1,18 @@
+.container {
+  padding-right: 80px;
+}
 .info {
   width: 100%;
   position: relative;
   .video-info {
     padding-top: 20px;
     padding-bottom: 25px;
-    border-bottom: 1px solid $line;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+    position: relative;
     .only-owner {
       position: absolute;
-      top: 80px;
       right: 0;
+      bottom: 0;
       text-align: end;
       font-size: 18px;
       line-height: 1.4;
@@ -30,7 +34,8 @@
   }
   .owner-info {
     padding-top: 20px;
-    border-bottom: 1px solid $line;
+    // border-bottom: 1px solid $second;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
     width: inherit;
     div {
       display: flex;
@@ -60,7 +65,7 @@
 
 .video__comments-form-div {
   width: 100%;
-  height: 200px;
+  height: min-content;
   padding: 20px;
   box-sizing: border-box;
   h3 {
@@ -88,7 +93,7 @@
         background: none;
         height: 35px;
         border: none;
-        border-bottom: 1px solid $line;
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
         box-sizing: border-box;
         width: 100%;
         color: $text;
@@ -98,25 +103,19 @@
         }
         &:focus {
           outline: none;
-          border-bottom: 2px solid white;
+          border-bottom: 2px solid $point;
         }
       }
       button {
         position: absolute;
-        bottom: -20px;
         right: 0;
+        top: -20px;
         width: 80px;
         height: 40px;
         background: none;
         border: none;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.6);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.246);
-        backdrop-filter: blur(3px);
-        -webkit-backdrop-filter: blur(3px);
-        border: 2px solid rgba(255, 255, 255, 0.18);
-        color: $text;
         cursor: grab;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
       }
     }
   }
@@ -125,24 +124,21 @@
 .video__comments {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
   margin-top: 20px;
   .video__comment {
     min-height: 80px;
     padding: 10px;
-    margin-bottom: 10px;
-    color: $text;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.246);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
     font-size: 17px;
-    display: grid;
     padding: 10px;
     display: flex;
-    position: relative;
+    // 수정사항
+    box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px,
+      rgba(255, 255, 255, 0.25) 0px 1px 0px inset;
+    white-space: normal;
+    word-break: break-all;
+
     img {
       height: 50px;
       width: 50px;
@@ -158,12 +154,20 @@
       grid-template-columns: 1fr;
       grid-template-rows: 40px 1fr;
       align-items: center;
-      span {
+      gap: 5px;
+      .name {
+        span {
+          margin-right: 10px;
+        }
+        .delete {
+          cursor: pointer;
+        }
+      }
+      .text {
         font-weight: 600;
       }
     }
     .delete {
-      position: absolute;
       top: 20px;
       right: 20px;
     }

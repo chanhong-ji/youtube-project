@@ -171,25 +171,27 @@ export const createComment = async (req, res) => {
     return res.sendStatus(404);
   }
 
-  const comment = await Comment.create({
-    text,
-    video: id,
-    owner: _id,
-    name,
-    avatarUrl: user.avatarUrl,
-  });
-
-  user.comments.push(comment._id);
-  user.save();
-  video.comments.push(comment._id);
-  video.save();
-  return res
-    .status(201)
-    .json({
+  try {
+    const comment = await Comment.create({
+      text,
+      video: id,
+      owner: _id,
+      name,
+      avatarUrl: user.avatarUrl,
+    });
+    user.comments.push(comment._id);
+    user.save();
+    video.comments.push(comment._id);
+    video.save();
+    return res.status(201).json({
       commentId: comment._id,
       commentName: name,
       commentAvatar: comment.avatarUrl,
     });
+  } catch (error) {
+    console.log("comment Model error: ", error);
+    return redirect(`/videos/${video.id}`);
+  }
 };
 
 export const deleteComment = async (req, res) => {

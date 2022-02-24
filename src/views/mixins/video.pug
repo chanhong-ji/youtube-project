@@ -3,6 +3,6 @@ mixin video(video)
         img(src=`${video.thumbUrl}`, alt="", crossorigin).video-mixin__thumb
         div.video-mixin__data
             span.video-mixin__title=video.title
-            span.video-mixin__meta 
+            div.video-mixin__meta 
                 span #{video.owner.name} • 
                 span #{video.meta.views}회

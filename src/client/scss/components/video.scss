@@ -1,21 +1,29 @@
 .video-mixin {
   .video-mixin__thumb {
-    height: 180px;
+    height: 200px;
+    width: 350px;
     border-radius: 7px;
-    width: 100%;
     background-color: black;
-    object-fit: contain;
+    object-fit: cover;
   }
   .video-mixin__data {
-    padding: 0px 15px;
+    padding-top: 2px;
+    width: 350px;
     .video-mixin__title {
-      font-size: 18px;
+      width: 100%;
+      font-size: 23px;
+      margin-bottom: 5px;
       display: block;
-      margin-top: 10px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .video-mixin__meta {
-      margin-top: 5px;
-      font-size: 12px;
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 14px;
+      opacity: 0.8;
     }
   }
 }

@@ -1,11 +1,9 @@
 extends base
 
 block content 
-    if errorMessage 
-        span=errorMessage
     form(method='post')
-        input(name="email",type="text", required, placeholder="Email address")
-        input(name="password", type="password", required, placeholder="Password")
+        input(name="email",type="text", required, placeholder="Email address", maxlength=320)
+        input(name="password", type="password", required, placeholder="Password", maxlenth=30)
         input(type="submit", value="Login")
         include partials/social-login
     div.auth-switch

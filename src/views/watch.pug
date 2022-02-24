@@ -1,61 +1,62 @@
 extends base
 
 block content
-    div#videoContainer(data-id=video._id, tabindex="100").video-container
-        video(src=video.videoUrl, crossorigin)
-        div#videoControls.videoControls
-            div.videoControls__play
-                span#play.videoControls__playBtn
-                    i.fas.fa-play.fa-xl
-                div.videoControls__time
-                    span#currentTime 00:00
-                    span /
-                    span#totalTime 00:00
-            input#timeline.videoControls__timeline(type="range", min="0", step="1", value="0")
-            div.videoControls__volume
-                input#volume(type="range", name="range", min="0", max="1", step="0.1", value="0.5")
-                span#mute 
-                    i.fas.fa-volume-up
-                span#fullScreen
-                    i.fas.fa-expand
-    div.info
-        div.video-info
-            each hashtag in video.hashtags
-                span.hash=hashtag
-            span.video-info__title=video.title
-            span.video-info__views 조회수 #{video.meta.views}
-            span.video-info__createdAt   • #{date}
-            if String(video.owner._id) === String(loggedInUser._id)
-                div.only-owner
-                    a(href=`${video.id}/edit`) Edit Video
-                    br
-                    a(href=`${video.id}/delete`) Delete Video
-        div.owner-info
-            div
-                img.owner-info__avatar(src=video.owner.avatarUrl, crossorigin)
-                a(href=`/users/${video.owner._id}`)=video.owner.name
-            p=video.description
+    div.container
+        section#videoContainer(data-id=video._id, tabindex="100").video-container
+            video(src=video.videoUrl, crossorigin)
+            div#videoControls.videoControls
+                div.videoControls__play
+                    span#play.videoControls__playBtn
+                        i.fas.fa-play.fa-xl
+                    div.videoControls__time
+                        span#currentTime 00:00
+                        span /
+                        span#totalTime 00:00
+                input#timeline.videoControls__timeline(type="range", min="0", step="1", value="0")
+                div.videoControls__volume
+                    input#volume(type="range", name="range", min="0", max="1", step="0.1", value="0.5")
+                    span#mute 
+                        i.fas.fa-volume-up
+                    span#fullScreen
+                        i.fas.fa-expand
+        section.info
+            div.video-info
+                each hashtag in video.hashtags
+                    span.hash=hashtag
+                span.video-info__title=video.title
+                span.video-info__views 조회수 #{video.meta.views}
+                span.video-info__createdAt   • #{date}
+                if String(video.owner._id) === String(loggedInUser._id)
+                    div.only-owner
+                        a(href=`${video.id}/edit`) Edit Video
+                        br
+                        a(href=`${video.id}/delete`) Delete Video
+            div.owner-info
+                div
+                    img.owner-info__avatar(src=video.owner.avatarUrl, crossorigin)
+                    a(href=`/users/${video.owner._id}`)=video.owner.name
+                p=video.description
 
-    if loggedIn
-        div.video__comments-form-div
-            h3 댓글 #{video.comments.length}개
-            div
-                img(src=loggedInUser.avatarUrl, crossorigin)
-                form.video__comment-form#commentForm
-                    textarea(cols="30", rows="1", placeholder="Write a nice comment")
-                    button Add Comment
+        if loggedIn
+            div.video__comments-form-div
+                h3 댓글 #{video.comments.length}개
+                div
+                    img(src=loggedInUser.avatarUrl, crossorigin)
+                    form.video__comment-form#commentForm
+                        textarea(cols="30", rows="1", placeholder="Write a nice comment", minlength=3, maxlength=300)
+                        button Add Comment
 
-    div.video__comments
-        ul
-            each comment in video.comments.reverse()
-                li.video__comment(data-id=comment._id)
-                    img(src=comment.avatarUrl, crossorigin)
-                    div.text-box
-                        div
-                            span=comment.name
-                        div.text=comment.text
-                    if String(comment.owner._id) == loggedInUser._id
-                        span.delete ❌
+        div.video__comments
+            ul
+                each comment in video.comments.reverse()
+                    li.video__comment(data-id=comment._id)
+                        img(src=comment.avatarUrl, crossorigin)
+                        div.text-box
+                            div.name
+                                span=comment.name
+                                if String(comment.owner._id) == loggedInUser._id
+                                    span.delete ✖
+                            div.text=comment.text
 
 block scripts
     script(src="/static/js/videoPlayer.js")

@@ -59,9 +59,8 @@ export const postLogin = async (req, res) => {
 
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
-    return res
-      .status(400)
-      .render("login", { pageTitle, errorMessage: "Wrong password" });
+    req.flash("error", "Wrong password");
+    return res.status(400).render("login", { pageTitle });
   }
 
   req.session.loggedIn = true;

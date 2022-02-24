@@ -11,7 +11,7 @@ const onMenuClick = () => {
         { transform: "translateX(-170px)", easing: "ease-out" },
       ],
       {
-        duration: 500,
+        duration: 300,
         fill: "forwards",
       }
     );
@@ -23,7 +23,7 @@ const onMenuClick = () => {
         { transform: "translateX(0px)", easing: "ease-out" },
       ],
       {
-        duration: 500,
+        duration: 300,
         fill: "forwards",
       }
     );
