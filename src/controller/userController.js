@@ -48,7 +48,9 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const { email, password } = req.body;
-  const user = await User.findOne({ email, socialOnly: false });
+  const user = await User.findOne({ email, socialOnly: false }).select([
+    "password",
+  ]);
 
   if (!user) {
     return res.status(400).render("login", {
@@ -134,7 +136,11 @@ export const finishGithubLogin = async (req, res) => {
       req.flash("error", "There's no authenticated email.");
       return res.redirect("/login");
     }
-    let user = await User.findOne({ email: emailObj.email });
+    let user = await User.findOne({ email: emailObj.email }).select([
+      "socialOnly",
+      "password",
+    ]);
+
     if (!user) {
       user = await User.create({
         email: emailObj.email,
@@ -229,7 +235,7 @@ export const postChangePassword = async (req, res) => {
     session: { loggedInUser: _id },
     body: { oldPassword, newPassword, newPassword1 },
   } = req;
-  const user = await User.findById(_id);
+  const user = await User.findById(_id).select("password");
 
   const ok = bcrypt.compare(oldPassword, user.password);
   if (!ok) {
@@ -255,13 +261,15 @@ export const postChangePassword = async (req, res) => {
 
 export const see = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).populate({
-    path: "videos",
-    populate: {
-      path: "owner",
-      model: "User",
-    },
-  });
+  const user = await User.findById(id)
+    .populate({
+      path: "videos",
+      populate: {
+        path: "owner",
+        model: "User",
+      },
+    })
+    .select("name");
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found" });
   }

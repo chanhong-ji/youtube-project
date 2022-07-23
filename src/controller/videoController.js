@@ -1,19 +1,26 @@
 import User from "../model/User";
 import Video from "../model/Video";
 import Comment from "../model/Comment";
+import { s3 } from "../middlewares";
 
 const isHeroku = process.env.NODE_ENV === "production";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
     .sort({ createdAt: "desc" })
-    .populate("owner");
+    .populate({ path: "owner", select: "name" })
+    .select(["title", "thumbUrl", "meta"]);
   return res.render("home", { pageTitle: "Home", videos });
 };
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner").populate("comments");
+  const video = await Video.findById(id)
+    .populate({ path: "owner", select: ["avatarUrl", "name"] })
+    .populate({
+      path: "comments",
+      select: ["_id", "avatarUrl", "name", "owner", "text"],
+    });
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
@@ -33,7 +40,12 @@ export const getEdit = async (req, res) => {
       user: { _id },
     },
   } = req;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).select([
+    "title",
+    "description",
+    "hashtags",
+    "owner",
+  ]);
 
   if (String(_id) !== String(video.owner)) {
     req.flash("error", "Not authorized");
@@ -53,7 +65,7 @@ export const postEdit = async (req, res) => {
       user: { _id },
     },
   } = req;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).select("owner");
 
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found" });
@@ -93,7 +105,7 @@ export const postUpload = async (req, res) => {
       owner: _id,
     });
 
-    const user = await User.findById(_id);
+    const user = await User.findById(_id).select("videos");
     user.videos.push(newVideo._id);
     user.save();
     return res.redirect("/");
@@ -112,18 +124,43 @@ export const deleteVideo = async (req, res) => {
       user: { _id },
     },
   } = req;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).select([
+    "owner",
+    "videoUrl",
+    "thumbUrl",
+  ]);
 
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found" });
   }
+
   if (String(_id) !== String(video.owner)) {
     req.flash("error", "Now authorized");
     return res.status(403).redirect("/");
   }
 
+  if (video.videoUrl.includes("ji-wetubeee.s3.amazonaws")) {
+    s3.deleteObjects(
+      {
+        Bucket: "ji-wetubeee",
+        Delete: {
+          Objects: [
+            {
+              Key: video.videoUrl.split(".com/").slice(-1)[0],
+            },
+            {
+              Key: video.thumbUrl.split(".com/").slice(-1)[0],
+            },
+          ],
+        },
+      },
+      (err) => {
+        console.log("AWS error:", err);
+      }
+    );
+  }
   await Video.findByIdAndDelete(id);
-  const user = await User.findById(_id);
+  const user = await User.findById(_id).select("videos");
   user.videos.splice(user.videos.indexOf(id), 1);
   user.save();
   return res.redirect("/");
@@ -137,7 +174,9 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(keyword, "i"),
       },
-    }).populate("owner");
+    })
+      .populate({ path: "owner", select: "name" })
+      .select(["id", "thumbUrl", "title", "meta"]);
   }
   return res.render("search", { pageTitle: "Search", videos });
 };
@@ -146,7 +185,7 @@ export const registerView = async (req, res) => {
   const {
     params: { id },
   } = req;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).select("meta");
   if (!video) {
     return res.sendStatus(404);
   }
@@ -164,8 +203,8 @@ export const createComment = async (req, res) => {
     },
   } = req;
 
-  const user = await User.findById(_id);
-  const video = await Video.findById(id);
+  const user = await User.findById(_id).select(["avatarUrl", "comments"]);
+  const video = await Video.findById(id).select("comments");
 
   if (!video) {
     return res.sendStatus(404);
@@ -199,9 +238,9 @@ export const deleteComment = async (req, res) => {
     params: { id },
   } = req;
 
-  const comment = await Comment.findById(id);
-  const video = await Video.findById(comment.video);
-  const user = await User.findById(comment.owner);
+  const comment = await Comment.findById(id).select(["video", "owner"]);
+  const video = await Video.findById(comment.video).select("comments");
+  const user = await User.findById(comment.owner).select("comments");
 
   if (String(user._id) !== req.session.user._id) {
     req.flash("error", "Not authorized");
