@@ -9,11 +9,19 @@
     margin-bottom: 10px;
   }
   h3 {
-    font-size: 18px;
+    font-size: 25px;
   }
   .profile__avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .fa-user {
+    font-size: 60px;
   }
 }

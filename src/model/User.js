@@ -7,12 +7,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   location: { type: String, maxlength: 30 },
   socialOnly: { type: Boolean, default: false, required: true },
-  avatarUrl: {
-    type: String,
-    default:
-      "https://ji-wetubeee.s3.ap-northeast-2.amazonaws.com/images/c4e9edf61e383aa65b24f246de2c8810",
-    required: true,
-  },
+  avatarUrl: { type: String },
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 });
