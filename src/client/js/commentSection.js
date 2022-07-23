@@ -9,10 +9,19 @@ const addComment = (text, id, name, avatarUrl) => {
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
-  const avatarImg = document.createElement("img");
-  avatarImg.src = avatarUrl;
-  avatarImg.alt = "";
-  avatarImg.crossOrigin = true;
+  let avatar;
+  if (avatarUrl) {
+    avatar = document.createElement("img");
+    avatar.src = avatarUrl;
+    avatar.alt = "";
+    avatar.crossOrigin = true;
+  } else {
+    avatar = document.createElement("div");
+    const i = document.createElement("i");
+    i.classList.add("fas", "fa-user");
+    avatar.appendChild(i);
+  }
+  avatar.className = "video__comment-avatar";
   const textBox = document.createElement("div");
   textBox.className = "text-box";
   const textBoxName = document.createElement("div");
@@ -25,7 +34,7 @@ const addComment = (text, id, name, avatarUrl) => {
   const deleteSpan = document.createElement("span");
   deleteSpan.className = "delete";
   deleteSpan.innerText = "✖";
-  newComment.appendChild(avatarImg);
+  newComment.appendChild(avatar);
   newComment.appendChild(textBox);
   textBox.appendChild(textBoxName);
   textBoxName.appendChild(textBoxNameText);
@@ -61,7 +70,6 @@ const onSubmit = async (event) => {
 const onDeleteBtnClick = async (event) => {
   const li = event.target.parentElement.parentElement.parentElement;
   const commentId = li.dataset.id;
-  console.log("comment li id: ", commentId);
   const response = await fetch(`/api/comments/${commentId}`, {
     method: "DELETE",
   });

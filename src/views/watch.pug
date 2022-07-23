@@ -41,7 +41,11 @@ block content
             div.video__comments-form-div
                 h3 댓글 #{video.comments.length}개
                 div
-                    img(src=loggedInUser.avatarUrl, crossorigin)
+                    if loggedInUser.avatarUrl
+                        img.video__comments-form-div-avatar(src=loggedInUser.avatarUrl, crossorigin)
+                    else
+                        div.video__comments-form-div-avatar
+                            i.fas.fa-user
                     form.video__comment-form#commentForm
                         textarea(cols="30", rows="1", placeholder="Write a nice comment", minlength=3, maxlength=300)
                         button Add Comment
@@ -50,7 +54,11 @@ block content
             ul
                 each comment in video.comments.reverse()
                     li.video__comment(data-id=comment._id)
-                        img(src=comment.avatarUrl, crossorigin)
+                        if comment.avatarUrl
+                            img.video__comment-avatar(src=comment.avatarUrl, crossorigin)
+                        else 
+                            div.video__comment-avatar
+                                i.fas.fa-user
                         div.text-box
                             div.name
                                 span=comment.name
