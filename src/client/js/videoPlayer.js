@@ -21,16 +21,19 @@ const onPlayClick = (event) => {
     event == PointerEvent &&
     event.target.id !== "videoContainer" &&
     event.currentTarget.id !== "play"
-  ) {
+  )
     return;
-  }
-
   if (video.paused) {
     video.play();
   } else {
     video.pause();
   }
+
   playBtnIcon.className = video.paused ? "fas fa-play" : "fas fa-pause";
+};
+
+const onControlClick = (e) => {
+  e.stopPropagation();
 };
 
 const onMuteClick = (event) => {
@@ -57,8 +60,14 @@ const onVolumeChange = (event) => {
   volumeValue = value;
 };
 
-const timeFormat = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(11, 8);
+const timeFormat = (seconds) => {
+  const duration = new Date(seconds * 1000).toISOString().substring(11, 19);
+  if (duration.substring(0, 2) === "00") {
+    return duration.substring(3);
+  } else {
+    return duration;
+  }
+};
 
 const onLoadedMetaData = () => {
   const total = Math.floor(video.duration);
@@ -159,15 +168,22 @@ const onEnded = () => {
   fetch(`/api/videos/${id}/view`, { method: "POST" });
 };
 
+const interId = setInterval(() => {
+  if (video.duration) {
+    clearInterval(interId);
+    onLoadedMetaData();
+  }
+}, 1000);
+
 playBtn.addEventListener("click", onPlayClick);
 muteBtn.addEventListener("click", onMuteClick);
 volumeRange.addEventListener("input", onVolumeChange);
-video.addEventListener("loadeddata", onLoadedMetaData);
 video.addEventListener("timeupdate", onTimeUpdate);
 videoContainer.addEventListener("click", onPlayClick);
 video.addEventListener("ended", onEnded);
 videoContainer.addEventListener("mousemove", onMouseMove);
 videoContainer.addEventListener("mouseleave", onMouseLeave);
+videoControls.addEventListener("click", onControlClick);
 timeline.addEventListener("input", onTimelineChange);
 fullScreenBtn.addEventListener("click", onFullScreen);
 document.addEventListener("keydown", onKeyPress);

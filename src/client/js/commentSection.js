@@ -45,6 +45,7 @@ const addComment = (text, id, name, avatarUrl) => {
 };
 
 const onSubmit = async (event) => {
+  event.target.removeEventListener("submit", onSubmit);
   event.preventDefault();
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
@@ -68,6 +69,7 @@ const onSubmit = async (event) => {
 };
 
 const onDeleteBtnClick = async (event) => {
+  event.target.removeEventListener("click", onDeleteBtnClick);
   const li = event.target.parentElement.parentElement.parentElement;
   const commentId = li.dataset.id;
   const response = await fetch(`/api/comments/${commentId}`, {

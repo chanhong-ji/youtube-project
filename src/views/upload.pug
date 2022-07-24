@@ -5,8 +5,6 @@ block content
         div.upload__video
             video#preview
             button#actionBtn.social__btn Start Recording
-        if errorMessage
-            span=errorMessage
         form(method="POST", enctype="multipart/form-data")
             label(for="video") Video File
             input(type="file", accept="video/*", required, id="video", name="video", maxlength=300)
@@ -14,7 +12,9 @@ block content
             input(type="file", accept="image/*", required, id="thumb", name="thumb", maxlength=300)
             input(placeholder="Title", required, type="text", name="title", minlength=5, maxlength=80)
             input(placeholder="Description", required, type="text", name="description", maxlength=500)
-            input(placeholder="Hashtags, separated by comma.", required, type="text", name="hashtags", maxlength=100)
+            input(placeholder="Hashtags, separated by comma, without #", required, type="text", name="hashtags", maxlength=100)
+            if errorMessage
+                include partials/errorMessage
             input(type="submit", value="Upload Video")
 
 block scripts

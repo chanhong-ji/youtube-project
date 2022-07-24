@@ -7,7 +7,7 @@ block content
             div#videoControls.videoControls
                 div.videoControls__play
                     span#play.videoControls__playBtn
-                        i.fas.fa-play.fa-xl
+                        i.fas.fa-play
                     div.videoControls__time
                         span#currentTime 00:00
                         span /
@@ -22,7 +22,7 @@ block content
         section.info
             div.video-info
                 each hashtag in video.hashtags
-                    span.hash=hashtag
+                    span.hash #{"#" + hashtag + ' '}
                 span.video-info__title=video.title
                 span.video-info__views 조회수 #{video.meta.views}
                 span.video-info__createdAt   • #{date}

@@ -2,6 +2,7 @@ import User from "../model/User";
 import Video from "../model/Video";
 import Comment from "../model/Comment";
 import { s3 } from "../middlewares";
+import flash from "express-flash";
 
 const isHeroku = process.env.NODE_ENV === "production";
 
@@ -74,12 +75,17 @@ export const postEdit = async (req, res) => {
     return res.status(403).redirect("/");
   }
 
+  if (hashtags.includes("#")) {
+    req.flash("error", "hashtags should not contain '#'");
+    return res.redirect(`/videos/${id}/edit`);
+  }
+
   await Video.findByIdAndUpdate(id, {
     title,
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
-  req.flash("success", "Changed saved");
+  req.flash("success", "Change saved");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -95,6 +101,11 @@ export const postUpload = async (req, res) => {
     files: { video, thumb },
     body: { title, description, hashtags },
   } = req;
+  if (hashtags.includes("#"))
+    return res.status(400).render("upload", {
+      pageTitle: "Upload Video",
+      errorMessage: "hashtags should not contain '#'",
+    });
   try {
     const newVideo = await Video.create({
       videoUrl: isHeroku ? video[0].location : "/" + video[0].path,
@@ -110,9 +121,9 @@ export const postUpload = async (req, res) => {
     user.save();
     return res.redirect("/");
   } catch (error) {
+    flash("error", "Upload fail");
     return res.status(400).render("upload", {
       pageTitle: "Upload Video",
-      errorMessage: error._message,
     });
   }
 };

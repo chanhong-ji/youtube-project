@@ -27,9 +27,7 @@
     padding: 10px;
     height: 80px;
     box-sizing: border-box;
-    background: linear-gradient(to top, black, transparent);
-    // 임시
-    // border: 2px solid white;
+    background-color: rgba(0, 0, 0, 0.8);
     &.showing {
       opacity: 1;
     }
@@ -42,6 +40,7 @@
       justify-content: space-around;
       .videoControls__playBtn {
         margin: 0px 15px;
+        font-size: 25px;
       }
       .videoControls__time {
         font-size: 16px;
