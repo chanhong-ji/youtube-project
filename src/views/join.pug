@@ -8,6 +8,8 @@ block content
         input(name="password2", type="password", required, placeholder="Confirm Password", maxlength=20)
         input(name="location", type='text', placeholder="Location", maxlength=30)
         input(type="submit", value="Join")
+        if errorMessage 
+            include partials/errorMessage
         include partials/social-login
     div.auth-switch
         span Already have an account? 

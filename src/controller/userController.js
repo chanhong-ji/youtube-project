@@ -48,9 +48,7 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
   const pageTitle = "Login";
   const { email, password } = req.body;
-  const user = await User.findOne({ email, socialOnly: false }).select([
-    "password",
-  ]);
+  const user = await User.findOne({ email, socialOnly: false });
 
   if (!user) {
     return res.status(400).render("login", {
@@ -206,6 +204,7 @@ export const postEdit = async (req, res) => {
       });
     }
   }
+
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
@@ -236,12 +235,12 @@ export const getChangePassword = (req, res) => {
 export const postChangePassword = async (req, res) => {
   const pageTitle = "Change Password";
   const {
-    session: { loggedInUser: _id },
+    session: { user: _id },
     body: { oldPassword, newPassword, newPassword1 },
   } = req;
   const user = await User.findById(_id).select("password");
 
-  const ok = bcrypt.compare(oldPassword, user.password);
+  const ok = await bcrypt.compare(oldPassword, user.password);
   if (!ok) {
     return res.status(400).render("change-password", {
       pageTitle,

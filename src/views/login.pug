@@ -5,6 +5,8 @@ block content
         input(name="email",type="text", required, placeholder="Email address", maxlength=320)
         input(name="password", type="password", required, placeholder="Password", maxlenth=30)
         input(type="submit", value="Login")
+        if errorMessage 
+            include partials/errorMessage
         include partials/social-login
     div.auth-switch
         span Don't have an account? 
